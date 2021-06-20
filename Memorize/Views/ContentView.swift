@@ -13,34 +13,38 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-        ScrollView(.vertical, showsIndicators: false, content: {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
-                ForEach(viewModel.cards) { card in
-                    CardView(card: card)
-                        .aspectRatio(2/3, contentMode: .fit)
-                        .onTapGesture {
-                            withAnimation(.easeInOut) {
-                                viewModel.choose(card)
-                            }
-                            
+            VStack {
+                ScrollView(.vertical, showsIndicators: false, content: {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
+                        ForEach(viewModel.cards) { card in
+                            CardView(card: card)
+                                .aspectRatio(2/3, contentMode: .fit)
+                                .onTapGesture {
+                                    withAnimation(.easeInOut) {
+                                        viewModel.choose(card)
+                                    }
+                                }
                         }
-                }
+                    }
+                })
+                Text("Score: \(viewModel.score())")
+                    .foregroundColor(.black)
+                    .font(.title)
             }
-        })
-        .foregroundColor(.red)
-        .navigationBarTitle("Vehicles", displayMode: .inline)
-        .toolbar(content: {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button("New Game") {
-                    viewModel.newGame()
+            .foregroundColor(.init(viewModel.currentTheme().color))
+            .navigationBarTitle(viewModel.currentTheme().name, displayMode: .inline)
+            .toolbar(content: {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button("New Game") {
+                        viewModel.newGame()
+                    }
                 }
-            }
+                
+            })
             
-        })
-
             
         }
-            
+        
         .padding()
     }
 }

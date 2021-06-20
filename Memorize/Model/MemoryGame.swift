@@ -18,8 +18,10 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
+                    EmojiMemoryGame.gameScore += 3
                 }
                 indexOfTheOneAndOnlyFaceUpCard = nil
+                EmojiMemoryGame.gameScore -= 1 // need to fix
             } else {
                 for index in cards.indices {
                     cards[index].isFaceUp = false
@@ -41,6 +43,9 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         }
         cards.shuffle()
     }
+    
+
+    
     
     struct Card: Identifiable {
         
