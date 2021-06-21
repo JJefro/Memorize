@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  EmojiMemoryGameView.swift
 //  Memorize
 //
 //  Created by Jevgenijs Jefrosinins on 17/06/2021.
@@ -7,44 +7,40 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct EmojiMemoryGameView: View {
     
-    @ObservedObject var viewModel: EmojiMemoryGame
+    @ObservedObject var game: EmojiMemoryGame
     
     var body: some View {
         NavigationView {
             VStack {
                 ScrollView(.vertical, showsIndicators: false, content: {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))]) {
-                        ForEach(viewModel.cards) { card in
-                            CardView(card: card)
+                        ForEach(game.cards) { card in
+                            CardView(card)
                                 .aspectRatio(2/3, contentMode: .fit)
                                 .onTapGesture {
                                     withAnimation(.easeInOut) {
-                                        viewModel.choose(card)
+                                        game.choose(card)
                                     }
                                 }
                         }
                     }
                 })
-                Text("Score: \(viewModel.score())")
+                Text("Score: \(game.score())")
                     .foregroundColor(.black)
                     .font(.title)
             }
-            .foregroundColor(.init(viewModel.currentTheme().color))
-            .navigationBarTitle(viewModel.currentTheme().name, displayMode: .inline)
+            .foregroundColor(.init(game.currentTheme().color))
+            .navigationBarTitle(game.currentTheme().name, displayMode: .inline)
             .toolbar(content: {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button("New Game") {
-                        viewModel.newGame()
+                        game.newGame()
                     }
                 }
-                
             })
-            
-            
         }
-        
         .padding()
     }
 }
@@ -54,7 +50,11 @@ struct ContentView: View {
 
 struct CardView: View {
     
-    let card: MemoryGame<String>.Card
+    private let card: EmojiMemoryGame.Card
+    
+    init(_ card: EmojiMemoryGame.Card) {
+        self.card = card
+    }
     
     var body: some View {
         ZStack {
@@ -92,9 +92,9 @@ struct CardView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
-        ContentView(viewModel: game)
+        EmojiMemoryGameView(game: game)
             .preferredColorScheme(.light)
-        ContentView(viewModel: game)
+        EmojiMemoryGameView(game: game)
             .preferredColorScheme(.dark)
     }
 }
