@@ -58,6 +58,10 @@ class EmojiMemoryGame: ObservableObject {
         objectWillChange.send()
         model.choose(card)
     }
+    
+    func shuffle() {
+        model.shuffle()
+    }
 
     func newGame() {
         EmojiMemoryGame.currentTheme = randomTheme()
@@ -80,4 +84,16 @@ class EmojiMemoryGame: ObservableObject {
         return EmojiMemoryGame.gameScore
     }
     
+}
+
+extension Int {
+var arc4random: Int {
+    if self > 0 {
+        return Int(arc4random_uniform(UInt32(self)))
+    } else if self < 0 {
+        return -Int(arc4random_uniform(UInt32(abs(self))))
+    } else {
+        return 0
+    }
+}
 }
