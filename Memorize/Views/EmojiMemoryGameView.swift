@@ -59,7 +59,7 @@ struct EmojiMemoryGameView: View {
             if isUndealt(card) || card.isMatched && !card.isFaceUp {
                 Color.clear
             } else {
-                CardView(card)
+                CardView(card: card)
                     .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                     .padding(5)
                     .transition(AnyTransition.asymmetric(insertion: .identity, removal: .scale))
@@ -75,7 +75,7 @@ struct EmojiMemoryGameView: View {
     
     var deckBody: some View {
         ZStack {
-            ForEach(game.cards.filter(isUndealt)) { card in CardView(card)
+            ForEach(game.cards.filter(isUndealt)) { card in CardView(card: card)
                 .matchedGeometryEffect(id: card.id, in: dealingNamespace)
                 .transition(AnyTransition.asymmetric(insertion: .opacity, removal: .identity))
                 .zIndex(zIndex(of: card))
@@ -125,13 +125,14 @@ struct EmojiMemoryGameView: View {
 
 struct CardView: View {
     
-    private let card: EmojiMemoryGame.Card
+    let card: EmojiMemoryGame.Card
     
     @State private var animatedBonusRemaining: Double = 0
     
-    init(_ card: EmojiMemoryGame.Card) {
-        self.card = card
-    }
+//    init(_ card: EmojiMemoryGame.Card) {
+//        self.card = card
+//    }
+    
     
     var body: some View {
         GeometryReader { geometry in
@@ -154,6 +155,7 @@ struct CardView: View {
                 Text(card.content)
                     .rotationEffect(Angle.degrees(card.isMatched ? 360 : 0))
                     .animation(.linear(duration: 1).repeatForever(autoreverses: false))
+                    .padding(5)
                     .font(Font.system(size: DrawingConstants.fontSize))
                     .scaleEffect(scale(thatFits: geometry.size))
             }
